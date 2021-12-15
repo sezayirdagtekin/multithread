@@ -2,11 +2,13 @@ package com.producerconsumer;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 class Consumer implements Callable<String> {
-	
+
 	List<Integer> buffer = BufferedData.getBuffer();
 	Lock lock = DataLock.LOCK;
 	Condition isEmptyCondition = DataLock.EMPTY_CONDITION;
@@ -22,7 +24,9 @@ class Consumer implements Callable<String> {
 				while (buffer.isEmpty()) {
 					System.out.println("Buffer is  empty! size:" + buffer.size());
 					// wait
-					isEmptyCondition.await();
+					if (!isEmptyCondition.await(10, TimeUnit.MILLISECONDS)) {
+						throw new TimeoutException("Consumer timeout! Maybe there is no data in producer!");
+					}
 				}
 				buffer.remove(buffer.size() - 1);
 				System.out.println("One item is removed from buffer");
