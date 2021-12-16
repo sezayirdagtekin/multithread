@@ -13,7 +13,7 @@ public class App {
 
 		Runnable barrierAction = () -> System.out.println("Barier opening!!!");
 		CyclicBarrier barier = new CyclicBarrier(4, barrierAction);
-		
+
 		var service = Executors.newFixedThreadPool(4);
 		List<Future<String>> futures = new ArrayList<>();
 
@@ -27,11 +27,10 @@ public class App {
 			try {
 				System.out.println(future.get());
 			} catch (InterruptedException | ExecutionException e) {
-
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			} finally {
 				service.shutdown();
-				//System.out.println("Executor service shut down");
+				// System.out.println("Executor service shut down");
 			}
 		});
 

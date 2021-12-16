@@ -3,6 +3,7 @@ package com.barrier;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.TimeUnit;
 
 public class Friend implements Callable<String> {
 
@@ -19,7 +20,7 @@ public class Friend implements Callable<String> {
 	    //Arrive time
 		Thread.sleep((random.nextInt(20)*100)+100);
 		System.out.println("I just arrived,wating  for the others!");
-		barier.await();
+		barier.await(5, TimeUnit.SECONDS);
 		System.out.println("lets go to the cineama!");
 		return "OK";
 	}
